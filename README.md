@@ -41,36 +41,37 @@ Se qualquer um dos testes falhar, o Maven retorna um erro, o build é marcado co
 Este é o arquivo que faz toda a mágica acontecer:
 
 ```yaml
-name: Java CI com Maven e JUnit 5
+name: Integracao Continua Java com JUnit
 
-# Define os gatilhos (triggers)
 on:
-  # Dispara no push para a branch 'main'
   push:
     branches: [ main ]
-    
-  # Dispara no pull request que tem como alvo a branch 'main'
   pull_request:
     branches: [ main ]
 
-# Define os trabalhos (jobs)
 jobs:
-  build-e-test:
-    # O tipo de máquina virtual para rodar o job
+
+  integracao-continua:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Faz o checkout do seu código no runner
+      # 1. Baixar o código do repositório
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      # 2. Configura o JDK 11
+      # 2. Instalar os pacotes (configurando o Java)
       - name: Configurar o JDK 11
         uses: actions/setup-java@v4
         with:
           java-version: '11'
           distribution: 'temurin'
-          cache: 'maven' # Opcional: acelera os builds futuros
+          cache: 'maven'
+
+      # 3. Compilar o projeto e 4. Executar os testes
+      - name: Compilar e rodar testes JUnit com Maven
+        # Este é o comando que executa testes JUnit.
+        # O Maven se encarrega de compilar, baixar dependências e rodar o JUnit.
+        run: mvn clean test
 
       # 3. Compila e roda testes JUnit
       - name: Compilar e rodar testes JUnit
