@@ -1,0 +1,32 @@
+name: Integracao Continua Java com JUnit
+
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  integracao-continua:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Baixar o código do repositório
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      # 2. Instalar os pacotes (configurando o Java)
+      - name: Configurar o JDK 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      # 3. Compilar o projeto e 4. Executar os testes
+      - name: Compilar e rodar testes JUnit com Maven
+        # Este é o comando que executa testes JUnit.
+        # O Maven se encarrega de compilar, baixar dependências e rodar o JUnit.
+        run: mvn clean test
